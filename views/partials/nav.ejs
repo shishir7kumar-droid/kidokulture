@@ -1,0 +1,30 @@
+<nav style="background: var(--white); box-shadow: var(--shadow); padding: 15px 0; margin-bottom: 30px; position: sticky; top: 0; z-index: 1000;">
+    <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
+        <a href="/" style="font-size: 1.5rem; font-weight: 700; color: var(--primary); letter-spacing: -1px;">
+            Kido<span style="color: var(--secondary);">Kulture</span>
+        </a>
+        <div style="display: flex; gap: 20px;">
+            <a href="/toys" class="nav-link <%= typeof category !== 'undefined' && category === 'toys' ? 'active' : '' %>">Toys</a>
+            <a href="/clothes" class="nav-link <%= typeof category !== 'undefined' && category === 'clothes' ? 'active' : '' %>">Fashion</a>
+            <a href="/essentials" class="nav-link <%= typeof category !== 'undefined' && category === 'essentials' ? 'active' : '' %>">Essentials</a>
+            <a href="/about" class="nav-link">About KidoKulture</a>
+        </div>
+    </div>
+</nav>
+
+<style>
+    .nav-link {
+        font-weight: 600;
+        color: var(--text-dark);
+        padding: 5px 10px;
+        border-radius: 8px;
+    }
+    .nav-link:hover {
+        color: var(--primary);
+        background: rgba(255, 107, 107, 0.05);
+    }
+    .nav-link.active {
+        color: var(--white);
+        background: var(--primary);
+    }
+</style>

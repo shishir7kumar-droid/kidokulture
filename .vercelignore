@@ -1,0 +1,5 @@
+node_modules
+.env
+test_products.txt
+curator_service.js
+vercel plugins

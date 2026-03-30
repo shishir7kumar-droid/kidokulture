@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Admin Dashboard - KidoKulture</title>
+    <%- include('partials/head') %>
+    <style>
+        .admin-card {
+            background: var(--white);
+            padding: 40px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            max-width: 800px;
+            margin: 40px auto;
+        }
+
+        .form-header {
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--bg-light);
+            padding-bottom: 20px;
+        }
+
+        .section-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--secondary);
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--text-dark);
+        }
+
+        input, select {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #edf2f7;
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--secondary);
+        }
+
+        .magic-fetch {
+            background: #f0f7ff;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            border: 2px dashed var(--secondary);
+        }
+
+        .error-box {
+            background: #fff5f5;
+            color: var(--primary);
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 10px;
+            display: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        hr {
+            border: none;
+            border-top: 2px solid #edf2f7;
+            margin: 40px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <%- include('partials/nav') %>
+
+    <div class="container">
+        <div style="display: flex; justify-content: flex-end; align-items: center; gap: 15px; margin-top: 20px;">
+            <form action="/admin/test-dummy-curated" method="POST" style="margin: 0;">
+                <button type="submit" class="btn" style="background: #edf2f7; color: #a0aec0; padding: 10px 20px; border-radius: 8px; font-weight: 600; font-size: 0.9rem; border: 1px dashed #cbd5e0;">🛠️ Test UI</button>
+            </form>
+            <a href="/admin/curator" class="btn btn-secondary" style="padding: 10px 20px; border-radius: 8px; font-weight: 600; font-size: 0.9rem;">✨ Curator Station</a>
+            <a href="/admin/logout" class="btn" style="background: #edf2f7; color: var(--text-dark); text-decoration: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; font-size: 0.9rem;">Logout</a>
+        </div>
+        <div class="admin-card">
+            <div class="form-header">
+                <h1>🚀 Admin Dashboard</h1>
+                <p style="color: #888;">Manage your store products and account</p>
+            </div>
+
+            <% if (typeof msg !== 'undefined' && msg) { %>
+                <div style="background: #e6fffa; color: #2c7a7b; padding: 15px; border-radius: 12px; margin-bottom: 30px; border: 1px solid #b2f5ea; font-weight: 600; text-align: center;">
+                    ✨ <%= msg %>
+                </div>
+            <% } %>
+            
+            <!-- Magic Scraper -->
+            <div class="magic-fetch">
+                <div class="section-label">✨ Magic Auto-Fill</div>
+                <div class="form-group">
+                    <label>Paste Product Link (Amazon/EarnKaro)</label>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="url" id="scrapeUrl" placeholder="https://amazon.in/..." style="flex-grow: 1;">
+                        <button type="button" class="btn btn-secondary" onclick="fetchMetadata()" id="fetchBtn">Magic Fill</button>
+                    </div>
+                    <div id="fetchError" class="error-box"></div>
+                </div>
+            </div>
+
+            <!-- Main Form -->
+            <form action="/admin/add-product" method="POST">
+                <div class="section-label">📝 Product Details</div>
+                
+                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px;">
+                    <div class="form-group">
+                        <label>Product Name</label>
+                        <input type="text" name="name" id="pName" required placeholder="e.g. Wooden Building Blocks">
+                    </div>
+                    <div class="form-group">
+                        <label>Price (₹)</label>
+                        <input type="number" name="price" step="0.01" required placeholder="0.00">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Category</label>
+                    <select name="category">
+                        <option value="toys">Toys</option>
+                        <option value="clothes">Fashion</option>
+                        <option value="essentials">Essentials</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Image URL</label>
+                    <input type="url" name="imageUrl" id="pImage" required placeholder="https://image-link.com/...">
+                </div>
+
+                <div class="form-group">
+                    <label>Affiliate (Shop Now) Link</label>
+                    <input type="url" name="affiliateUrl" id="pAffiliate" required placeholder="Your affiliate link">
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%; font-size: 1.1rem; padding: 16px;">Save Product to Store</button>
+            </form>
+
+            <hr>
+
+            <!-- Change Password -->
+            <div class="section-label">🔐 Account Settings</div>
+            <div class="magic-fetch" style="background: #fffaf0; border-color: #fbd38d;">
+                <p style="margin-bottom: 15px; font-weight: 600; color: #744210;">Change Admin Password</p>
+                <form action="/admin/change-password" method="POST" onsubmit="return confirm('Change password?')">
+                    <div style="display: flex; gap: 10px;">
+                        <input type="password" name="newPassword" placeholder="Enter new password" required style="flex-grow: 1;">
+                        <button type="submit" class="btn btn-primary" style="background: #f6ad55; border-color: #f6ad55;">Update Password</button>
+                    </div>
+                </form>
+            </div>
+
+            <hr>
+
+            <!-- Product List -->
+            <div class="section-label">📦 Existing Products</div>
+            <div class="product-list-admin">
+                <% if (products && products.length > 0) { %>
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="text-align: left; border-bottom: 2px solid #edf2f7;">
+                                <th style="padding: 12px 0;">Product</th>
+                                <th style="padding: 12px 0;">Category</th>
+                                <th style="padding: 12px 0;">Price</th>
+                                <th style="padding: 12px 0; text-align: right;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% products.forEach(product => { %>
+                                <tr style="border-bottom: 1px solid #edf2f7;">
+                                    <td style="padding: 15px 0;">
+                                        <div style="display: flex; align-items: center; gap: 10px;">
+                                            <img src="<%= product.imageUrl %>" style="width: 40px; height: 40px; border-radius: 4px; object-fit: cover;">
+                                            <span style="font-weight: 600; font-size: 0.9rem;"><%= product.name %></span>
+                                        </div>
+                                    </td>
+                                    <td style="padding: 15px 0; font-size: 0.9rem; text-transform: capitalize;"><%= product.category %></td>
+                                    <td style="padding: 15px 0; font-size: 0.9rem; font-weight: 700;">₹<%= product.price %></td>
+                                    <td style="padding: 15px 0; text-align: right;">
+                                        <form action="/admin/delete-product/<%= product._id %>" method="POST" onsubmit="return confirm('Delete this product?')">
+                                            <button type="submit" class="btn" style="background: #fff5f5; color: var(--primary); padding: 8px 12px; font-size: 0.8rem;">Delete</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        </tbody>
+                    </table>
+                <% } else { %>
+                    <p style="text-align: center; color: #888; padding: 20px;">No products in the store yet.</p>
+                <% } %>
+            </div>
+        </div>
+    </div>
+
+    <%- include('partials/footer') %>
+
+    <script>
+        async function fetchMetadata() {
+            const url = document.getElementById('scrapeUrl').value;
+            const errorDiv = document.getElementById('fetchError');
+            const fetchBtn = document.getElementById('fetchBtn');
+
+            if (!url) return alert('Please paste a link first');
+
+            fetchBtn.innerText = 'Magic working...';
+            fetchBtn.disabled = true;
+            errorDiv.style.display = 'none';
+
+            try {
+                const response = await fetch('/admin/fetch-metadata', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url })
+                });
+
+                const data = await response.json();
+
+                if (data.error) {
+                    errorDiv.innerText = '🪄 ' + data.error;
+                    errorDiv.style.display = 'block';
+                } else {
+                    document.getElementById('pName').value = data.title || '';
+                    document.getElementById('pImage').value = data.image || '';
+                    document.getElementById('pAffiliate').value = url;
+                    // Success feedback
+                    fetchBtn.innerText = 'Success!';
+                    setTimeout(() => { fetchBtn.innerText = 'Magic Fill'; fetchBtn.disabled = false; }, 2000);
+                    return;
+                }
+            } catch (err) {
+                errorDiv.innerText = '❌ Network error - check your connection';
+                errorDiv.style.display = 'block';
+            } finally {
+                if (fetchBtn.innerText !== 'Success!') {
+                    fetchBtn.innerText = 'Magic Fill';
+                    fetchBtn.disabled = false;
+                }
+            }
+        }
+    </script>
+</body>
+</html>

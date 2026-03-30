@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Admin Login - KidoKulture</title>
+    <%- include('partials/head') %>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #FF6B6B 0%, #4D96FF 100%);
+            margin: 0;
+        }
+
+        .login-card {
+            background: var(--white);
+            padding: 40px;
+            border-radius: 24px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .brand-logo {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 30px;
+            display: block;
+        }
+
+        .login-card h2 {
+            margin-bottom: 30px;
+            color: var(--text-dark);
+            font-size: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #edf2f7;
+            border-radius: 12px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 4px rgba(77, 150, 255, 0.1);
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #888;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .back-link:hover {
+            color: var(--secondary);
+        }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <a href="/" class="brand-logo">Kido<span>Kulture</span></a>
+        <h2>Admin Login</h2>
+        <% if (error) { %>
+            <div style="background: #fff5f5; color: #ff4d4d; padding: 10px; border-radius: 8px; margin-bottom: 20px; font-weight: 600;">
+                <%= error %>
+            </div>
+        <% } %>
+        <form action="/admin/login" method="POST">
+            <div class="form-group">
+                <input type="text" name="username" placeholder="Username" required>
+            </div>
+            <div class="form-group">
+                <input type="password" name="password" placeholder="Password" required>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 16px; font-size: 1.1rem;">Login to Dashboard</button>
+        </form>
+        <a href="/" class="back-link">← Back to Store</a>
+    </div>
+</body>
+</html>

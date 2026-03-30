@@ -1,0 +1,202 @@
+<%- include('../partials/head') %>
+<%- include('../partials/nav') %>
+
+<style>
+    /* Curator Specific Styles */
+    .curator-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        padding: 20px 0;
+    }
+
+    .review-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 25px;
+        margin-bottom: 50px;
+    }
+
+    .curator-card {
+        background: var(--white);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        border: 2px solid transparent;
+    }
+
+    .curator-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-hover);
+    }
+
+    /* Premium Highlights */
+    .card-premium-wood { border-color: #D4AF37; }
+    .card-organic { border-color: #6BCB77; }
+
+    .curator-card-img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .curator-card-body {
+        padding: 20px;
+        flex-grow: 1;
+    }
+
+    .material-highlight {
+        display: block;
+        font-weight: 800; /* Extra bold */
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        letter-spacing: 1.2px;
+        margin-bottom: 10px;
+        color: var(--primary);
+    }
+
+    .product-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 10px;
+        color: var(--text-dark);
+    }
+
+    .age-pill-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 15px;
+    }
+
+    .age-pill {
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: white;
+    }
+
+    /* Color coding logic map */
+    .age-infants { background-color: #4D96FF; } 
+    .age-toddlers { background-color: #6BCB77; } 
+    .age-preschool { background-color: #FFD93D; color: var(--text-dark); } 
+    .age-kids { background-color: #FF6B6B; } 
+    .age-teens { background-color: #9B51E0; }
+
+    .curator-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 20px;
+        background: #fdfdfd;
+        border-top: 1px solid #eee;
+    }
+
+    .btn-row {
+        display: flex;
+        gap: 10px;
+    }
+
+    .btn-approve { flex: 2; background-color: var(--success); color: white; }
+    .btn-approve:hover { background-color: #2ecc71; box-shadow: 0 0 15px rgba(46, 204, 113, 0.4); }
+    
+    .btn-complete { flex: 1; background-color: var(--secondary); color: white; }
+
+    .btn-reject { flex: 1; background-color: #f1f2f6; color: #a4b0be; }
+    .btn-reject:hover { background-color: #ff4757; color: white; }
+
+    .bulk-cleanup-bar {
+        background: #fff5f5;
+        padding: 15px 25px;
+        border-radius: var(--radius);
+        margin-bottom: 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border: 1px solid #fed7d7;
+    }
+
+    @media (max-width: 768px) {
+        .review-grid { grid-template-columns: 1fr; }
+        .curator-header { flex-direction: column; align-items: flex-start; gap: 15px; }
+        .bulk-cleanup-bar { flex-direction: column; gap: 15px; text-align: center; }
+    }
+</style>
+
+<div class="container">
+    <header class="curator-header">
+        <div>
+            <h1>Curator Review Station</h1>
+            <p>Archiving & Asset Management (Cloudinary Integrated)</p>
+        </div>
+        <div class="stats-pills">
+            <span class="age-pill age-infants">Pending: <%= products.length %></span>
+        </div>
+    </header>
+
+    <% if (rejectedCount > 0) { %>
+        <div class="bulk-cleanup-bar">
+            <div>
+                <strong style="color: #c53030;">🧹 Maintenance Required:</strong> 
+                <span><%= rejectedCount %> items rejected in the last 24h are taking up Cloudinary space.</span>
+            </div>
+            <form action="/admin/bulk-cleanup-rejected" method="POST">
+                <button type="submit" class="btn" style="background: #e53e3e; color: white;">Run Bulk Asset Cleanup</button>
+            </form>
+        </div>
+    <% } %>
+
+    <% if (typeof msg !== 'undefined' && msg) { %>
+        <div style="background: #e6fffa; color: #2c7a7b; padding: 15px; border-radius: 12px; margin-bottom: 30px; border: 1px solid #b2f5ea; font-weight: 600; text-align: center;">
+            ✨ <%= msg %>
+        </div>
+    <% } %>
+
+    <div class="review-grid">
+        <% if (products && products.length > 0) { %>
+            <% products.forEach(product => { %>
+                <div class="curator-card <%= product.materialHighlight && (product.materialHighlight.toLowerCase().includes('wood') ? 'card-premium-wood' : (product.materialHighlight.toLowerCase().includes('organic') ? 'card-organic' : '')) %>">
+                    <img src="<%= product.imageUrl %>" alt="<%= product.name %>" class="curator-card-img">
+                    <div class="curator-card-body">
+                        <span class="material-highlight">✨ <%= product.materialHighlight || 'STANDARD QUALITY' %></span>
+                        <h3 class="product-title"><%= product.name %></h3>
+                        <div class="age-pill-container">
+                            <% if (product.ageGroup && product.ageGroup.length > 0) { %>
+                                <% product.ageGroup.forEach(age => { %>
+                                    <span class="age-pill age-<%= age.toLowerCase() %>"><%= age %></span>
+                                <% }) %>
+                            <% } %>
+                        </div>
+                        <p>₹<%= product.price %> - Ready for verification.</p>
+                        <p style="font-size: 0.7rem; color: #aaa; margin-top: 10px;">ID: <%= product.public_id %></p>
+                    </div>
+                    <div class="curator-actions">
+                        <div class="btn-row">
+                            <form action="/admin/complete-curated/<%= product._id %>" method="POST" style="flex: 1;">
+                                <button type="submit" class="btn btn-complete" title="Mark as Sold & Cleanup">Mark Sold</button>
+                            </form>
+                            <form action="/admin/reject-curated/<%= product._id %>" method="POST" style="flex: 1;">
+                                <button type="submit" class="btn btn-reject" title="Delete from Cloudinary & DB">Reject</button>
+                            </form>
+                        </div>
+                        <button class="btn btn-approve">Approve & Go Live</button>
+                    </div>
+                </div>
+            <% }) %>
+        <% } else { %>
+            <div style="grid-column: 1/-1; text-align: center; padding: 100px 50px; background: white; border-radius: var(--radius); border: 2px dashed #edf2f7;">
+                <div style="font-size: 3rem; margin-bottom: 20px;">🤖</div>
+                <h2 style="color: var(--text-dark); margin-bottom: 10px;">Waiting for Bot...</h2>
+                <p style="color: #a0aec0; max-width: 400px; margin: 0 auto;">Our curation bot is scanning for premium products. New arrivals will appear here automatically as soon as they are found.</p>
+            </div>
+        <% } %>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>

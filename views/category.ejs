@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title><%= category === 'toys' ? 'Toy Store' : (category === 'clothes' ? 'Kids Fashion' : 'Essentials') %> - KidoKulture</title>
+    <%- include('partials/head') %>
+    <style>
+        .page-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .page-header h1 {
+            font-size: 2.5rem;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+        }
+        .page-header p {
+            color: #888;
+            font-size: 1.1rem;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 30px;
+        }
+
+        .product-card {
+            background: var(--white);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-bottom: 1px solid #f0f0f0;
+            transition: transform 0.5s ease;
+        }
+
+        .product-card:hover .product-image {
+            transform: scale(1.05);
+        }
+
+        .product-info {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--text-dark);
+        }
+
+        .product-price {
+            font-size: 1.4rem;
+            color: var(--success);
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        /* Trust Bar Styling */
+        .trust-bar {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px dashed #eee;
+            display: flex;
+            justify-content: space-between;
+            gap: 5px;
+        }
+        .trust-item {
+            text-align: center;
+            flex: 1;
+        }
+        .trust-icon {
+            font-size: 1.2rem;
+            display: block;
+            margin-bottom: 4px;
+        }
+        .trust-text {
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: #777;
+            line-height: 1.1;
+            display: block;
+            text-transform: uppercase;
+        }
+        .trust-item:nth-child(1) .trust-icon { color: #4D96FF; } /* Blue for Security */
+        .trust-item:nth-child(2) .trust-icon { color: #FFD93D; } /* Yellow for Quality */
+        .trust-item:nth-child(3) .trust-icon { color: #6BCB77; } /* Green for Easy Returns */
+    </style>
+</head>
+<body>
+
+    <%- include('partials/nav') %>
+
+    <div class="container">
+        <header class="page-header">
+            <h1>
+                <% if (category === 'toys') { %>
+                    🎨 Toy Store
+                <% } else if (category === 'clothes') { %>
+                    👕 Kids Fashion
+                <% } else { %>
+                    ✨ <%= category.charAt(0).toUpperCase() + category.slice(1) %>
+                <% } %>
+            </h1>
+            <p>Handpicked essentials for your little ones</p>
+        </header>
+
+        <main>
+            <% if (products.length > 0) { %>
+                <div class="product-grid">
+                    <% products.forEach(product => { %>
+                        <div class="product-card">
+                            <div style="overflow: hidden;">
+                                <img src="<%= product.imageUrl %>" alt="<%= product.name %>" class="product-image">
+                            </div>
+                            <div class="product-info">
+                                <h3 class="product-name"><%= product.name %></h3>
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: auto;">
+                                    <span class="product-price">₹<%= product.price %></span>
+                                    <a href="<%= product.affiliateUrl %>" target="_blank" class="btn btn-primary">Shop Now</a>
+                                </div>
+                                <div class="trust-bar">
+                                    <div class="trust-item">
+                                        <span class="trust-icon">🛡️</span>
+                                        <span class="trust-text">Secure<br>Razorpay</span>
+                                    </div>
+                                    <div class="trust-item">
+                                        <span class="trust-icon">⭐</span>
+                                        <span class="trust-text">Hand-Picked<br>Quality</span>
+                                    </div>
+                                    <div class="trust-item">
+                                        <span class="trust-icon">🔄</span>
+                                        <span class="trust-text">7-Day<br>Replacement</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <% }) %>
+                </div>
+            <% } else { %>
+                <div class="empty-state">
+                    <h2 style="font-size: 3rem; margin-bottom: 20px;">🧸</h2>
+                    <h3>Oops! No products found.</h3>
+                    <p style="margin-top: 10px;">The art of curation takes time. We are carefully hand-selecting the finest products to ensure only the best for your little ones. Please check back soon.</p>
+                    <a href="/" class="btn btn-secondary" style="margin-top: 20px;">Back to Home</a>
+                </div>
+            <% } %>
+        </main>
+    </div>
+
+    <%- include('partials/footer') %>
+
+</body>
+</html>

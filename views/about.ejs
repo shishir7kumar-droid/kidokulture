@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>About KidoKulture</title>
+    <%- include('partials/head') %>
+    <style>
+        .about-card {
+            background: var(--white);
+            padding: 60px 40px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            max-width: 850px;
+            margin: 60px auto;
+            text-align: left;
+        }
+
+        .about-header {
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .about-header h1 {
+            font-size: 2.5rem;
+            color: var(--text-dark);
+            margin-bottom: 20px;
+        }
+
+        .about-header p {
+            color: var(--primary);
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .about-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #444;
+        }
+
+        .about-content h2 {
+            color: var(--secondary);
+            margin: 40px 0 20px;
+            font-size: 1.8rem;
+        }
+
+        .about-content p {
+            margin-bottom: 20px;
+        }
+
+        .about-content ul {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 30px;
+        }
+
+        .about-content li {
+            margin-bottom: 15px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .about-content li strong {
+            color: var(--primary);
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+            text-align: center;
+        }
+
+        .feature-item h3 {
+            color: var(--secondary);
+            margin-bottom: 10px;
+        }
+
+        .cta-container {
+            text-align: center;
+            margin-top: 60px;
+        }
+    </style>
+</head>
+<body>
+
+    <%- include('partials/nav') %>
+
+    <div class="container">
+        <article class="about-card">
+            <header class="about-header">
+                <h1>Welcome to KidoKulture</h1>
+                <p>Where Every Choice is a Spark</p>
+            </header>
+
+            <div class="about-content">
+                <p>In a world that often feels like a conveyor belt—where schools can sometimes feel more like factories and the pace of life leaves parents racing against the clock—childhood deserves a sanctuary. At KidoKulture, we believe that the things your children surround themselves with shouldn't just fill a room; they should fuel a soul.</p>
+                
+                <p>We scour the digital world to bring the absolute best of the web to your doorstep, curated with a single mission: to move beyond the "ordinary" and embrace the "extraordinary."</p>
+
+                <h2>More Than Play: We Curate Dreams</h2>
+                <p>Most toys are designed to keep a child busy. Our selection is designed to keep them inspired. We don't just look for "playthings"; we look for portals.</p>
+                <ul>
+                    <li>
+                        <strong>The Difference:</strong> We find products that encourage kids to stop looking at what is and start imagining what could be.
+                    </li>
+                    <li>
+                        <strong>The Goal:</strong> To turn playtime into a rehearsal for a life without limits. When a child engages with the right tool, they aren't just playing; they are dreaming in high definition.
+                    </li>
+                </ul>
+
+                <h2>More Than Fashion: We Curate Vibes</h2>
+                <p>In an era of fast fashion and blending in, we believe clothing is the first layer of a child's confidence.</p>
+                <ul>
+                    <li>
+                        <strong>The Vibe:</strong> We skip the generic and hunt for pieces that carry an energy—clothes that make a child feel like the protagonist of their own story.
+                    </li>
+                    <li>
+                        <strong>The Impact:</strong> When a kid "vibes" with what they wear, they walk a little taller. It’s not about the brand; it’s about the feeling of being different, authentic, and unstoppable.
+                    </li>
+                </ul>
+
+                <h2>Why We Do It</h2>
+                <p>We know the reality of modern parenting. You are busy, the world is loud, and sometimes it feels like kids are left to navigate the noise on their own. In those moments, the physical objects in their lives—the toy they hold at night or the jacket they put on for a tough day—become their anchors.</p>
+                
+                <p>KidoKulture is here to ensure those anchors are strong, beautiful, and full of character. We do the digging across the "www" so you can focus on the moments that matter, knowing that the products in your home are helping your child feel different, confident, and truly seen.</p>
+            </div>
+
+            <hr style="border: none; border-top: 2px solid #f0f0f0; margin: 40px 0;">
+
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <h3>🛡️ Secure</h3>
+                    <p>Protected by Razorpay's world-class security.</p>
+                </div>
+                <div class="feature-item">
+                    <h3>⭐ Premium</h3>
+                    <p>Only the best-rated, high-quality products.</p>
+                </div>
+                <div class="feature-item">
+                    <h3>🔄 Easy</h3>
+                    <p>Hassle-free 7-day replacement policy.</p>
+                </div>
+            </div>
+
+            <div class="cta-container">
+                <a href="/" class="btn btn-primary">Start Shopping</a>
+            </div>
+        </article>
+    </div>
+
+    <%- include('partials/footer') %>
+
+</body>
+</html>
