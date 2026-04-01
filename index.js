@@ -110,6 +110,12 @@ app.post('/admin/fetch-metadata', async (req, res) => {
 
 // API for Bot Curation (Receiver)
 app.post('/api/bot/curate', async (req, res) => {
+    // Basic API Key Check
+    const apiKey = req.headers['x-api-key'];
+    if (!apiKey || apiKey !== process.env.CURATOR_API_KEY) {
+        return res.status(401).json({ error: 'Unauthorized: Invalid API Key' });
+    }
+
     const { title, material, age_group, link, affiliate_link, imageUrl } = req.body;
     
     try {
